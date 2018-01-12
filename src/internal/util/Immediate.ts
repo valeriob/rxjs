@@ -1,6 +1,6 @@
 let nextHandle = 0;
-
 const tasksByHandle: { [handle: string]: () => void } = {};
+const resolvedPromise = Promise.resolve();
 
 function runIfPresent(handle: number) {
   const cb = tasksByHandle[handle];
@@ -13,7 +13,7 @@ export const Immediate = {
   setImmediate(cb: () => void): number {
     const handle = nextHandle++;
     tasksByHandle[handle] = cb;
-    Promise.resolve().then(() => runIfPresent(handle));
+    resolvedPromise.then(() => runIfPresent(handle));
     return handle;
   },
 
